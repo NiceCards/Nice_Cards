@@ -45,15 +45,19 @@ const buildProductQuery = async (query) => {
 };
 
 const buildSort = (sort) => {
+  // Always include _id as a tie-breaker so that ordering is fully
+  // deterministic. Without it, documents sharing the same sort key
+  // (e.g. identical createdAt / numReviews / price) can appear on more
+  // than one page or be skipped between pages.
   const map = {
-    newest: { createdAt: -1 },
-    price_asc: { price: 1 },
-    price_desc: { price: -1 },
-    name_asc: { name: 1 },
-    rating: { rating: -1 },
-    popular: { numReviews: -1 },
+    newest: { createdAt: -1, _id: -1 },
+    price_asc: { price: 1, _id: 1 },
+    price_desc: { price: -1, _id: -1 },
+    name_asc: { name: 1, _id: 1 },
+    rating: { rating: -1, _id: -1 },
+    popular: { numReviews: -1, _id: -1 },
   };
-  return map[sort] || { createdAt: -1 };
+  return map[sort] || { createdAt: -1, _id: -1 };
 };
 
 /**

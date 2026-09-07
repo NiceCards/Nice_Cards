@@ -5,12 +5,13 @@ import toast from 'react-hot-toast';
 import { useProduct } from '../hooks/useProducts';
 import { useCart } from '../context/CartContext';
 import { Rating } from '../components/ProductCard';
+import QuantityStepper from '../components/QuantityStepper';
 import { SkeletonText } from '../components/Skeletons';
 import EmptyState from '../components/EmptyState';
 import { formatINR } from '../utils/currency';
 import { imageUrl } from '../utils/media';
 import {
-  IconCart, IconMinus, IconPlus, IconShield, IconTruck, IconClock,
+  IconCart, IconShield, IconTruck, IconClock,
   IconChevronLeft, IconPackage, IconCheck, IconSearch,
 } from '../components/icons';
 
@@ -165,25 +166,11 @@ const ProductDetails = () => {
 
           {/* Quantity + add to cart */}
           <div className="mt-7 flex flex-wrap items-center gap-3">
-            <div className="flex items-center rounded-xl border border-slate-200 dark:border-slate-700">
-              <button
-                onClick={() => setQuantity((q) => Math.max(1, q - 1))}
-                className="grid h-12 w-12 place-items-center text-slate-500 hover:text-brand-600 disabled:opacity-40"
-                disabled={quantity <= 1}
-                aria-label="Decrease quantity"
-              >
-                <IconMinus size={16} />
-              </button>
-              <span className="w-10 text-center font-bold">{quantity}</span>
-              <button
-                onClick={() => setQuantity((q) => Math.min(q + 1, Math.max(product.stock, 1)))}
-                className="grid h-12 w-12 place-items-center text-slate-500 hover:text-brand-600 disabled:opacity-40"
-                disabled={outOfStock}
-                aria-label="Increase quantity"
-              >
-                <IconPlus size={16} />
-              </button>
-            </div>
+            <QuantityStepper
+              value={quantity}
+              max={Math.max(product.stock, 1)}
+              onChange={setQuantity}
+            />
 
             <button
               onClick={handleAdd}

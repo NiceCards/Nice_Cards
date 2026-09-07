@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import { useProducts, useCategories } from '../hooks/useProducts';
@@ -14,6 +14,20 @@ const fadeUp = {
     y: 0,
     transition: { delay: i * 0.08, duration: 0.5, ease: [0.16, 1, 0.3, 1] },
   }),
+};
+
+const useMediaQuery = (query) => {
+  const [matches, setMatches] = useState(
+    () => (typeof window !== 'undefined' ? window.matchMedia(query).matches : false)
+  );
+  useEffect(() => {
+    const mq = window.matchMedia(query);
+    const handler = (e) => setMatches(e.matches);
+    mq.addEventListener('change', handler);
+    setMatches(mq.matches);
+    return () => mq.removeEventListener('change', handler);
+  }, [query]);
+  return matches;
 };
 
 const Hero = () => {
@@ -162,6 +176,12 @@ const CategoryStrip = () => {
 const Home = () => {
   const featured = useProducts({ sort: 'popular', limit: 8 });
   const newArrivals = useProducts({ sort: 'newest', limit: 4 });
+  const isMobile = useMediaQuery('(max-width: 639px)');
+
+  // On mobile show fewer cards so customers don't have to scroll too much,
+  // while still laying them out two per row instead of a single column.
+  const featuredList = isMobile ? featured.products.slice(0, 4) : featured.products;
+  const newArrivalsList = isMobile ? newArrivals.products.slice(0, 2) : newArrivals.products;
 
   return (
     <div className="animate-fade-in">
@@ -184,8 +204,8 @@ const Home = () => {
         {featured.loading ? (
           <SkeletonGrid count={8} />
         ) : (
-          <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
-            {featured.products.map((p) => <ProductCard key={p._id} product={p} />)}
+          <div className="grid grid-cols-2 gap-4 sm:gap-6 lg:grid-cols-3 xl:grid-cols-4">
+            {featuredList.map((p) => <ProductCard key={p._id} product={p} />)}
           </div>
         )}
       </section>
@@ -199,8 +219,8 @@ const Home = () => {
           {newArrivals.loading ? (
             <SkeletonGrid count={4} />
           ) : (
-            <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-4">
-              {newArrivals.products.map((p) => <ProductCard key={p._id} product={p} />)}
+            <div className="grid grid-cols-2 gap-4 sm:gap-6 lg:grid-cols-4">
+              {newArrivalsList.map((p) => <ProductCard key={p._id} product={p} />)}
             </div>
           )}
         </div>

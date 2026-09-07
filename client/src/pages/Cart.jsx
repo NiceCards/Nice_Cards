@@ -2,9 +2,10 @@ import { Link } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useCart } from '../context/CartContext';
 import EmptyState from '../components/EmptyState';
+import QuantityStepper from '../components/QuantityStepper';
 import { formatINR } from '../utils/currency';
 import { imageUrl } from '../utils/media';
-import { IconCart, IconPlus, IconMinus, IconTrash, IconArrowRight } from '../components/icons';
+import { IconCart, IconTrash, IconArrowRight } from '../components/icons';
 
 const Cart = () => {
   const { items, total, count, removeItem, updateQuantity, clearCart } = useCart();
@@ -65,20 +66,7 @@ const Cart = () => {
                   </div>
 
                   <div className="flex items-center justify-between">
-                    <div className="flex items-center rounded-lg border border-slate-200 dark:border-slate-700">
-                      <button onClick={() => updateQuantity(item.product, item.quantity - 1)} className="grid h-9 w-9 place-items-center text-slate-500 hover:text-brand-600" aria-label="Decrease">
-                        <IconMinus size={14} />
-                      </button>
-                      <span className="w-8 text-center text-sm font-bold">{item.quantity}</span>
-                      <button
-                        onClick={() => updateQuantity(item.product, item.quantity + 1)}
-                        disabled={item.quantity >= item.stock}
-                        className="grid h-9 w-9 place-items-center text-slate-500 hover:text-brand-600 disabled:opacity-40"
-                        aria-label="Increase"
-                      >
-                        <IconPlus size={14} />
-                      </button>
-                    </div>
+                    <QuantityStepper compact value={item.quantity} max={item.stock} onChange={(q) => updateQuantity(item.product, q)} />
                     <p className="font-display text-lg font-extrabold text-brand-600 dark:text-brand-300">
                       {formatINR(item.price * item.quantity)}
                     </p>

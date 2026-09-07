@@ -145,7 +145,7 @@ const AdminProducts = () => {
                   </td>
                   <td className="px-5 py-3 font-semibold">{formatINR(p.price)}</td>
                   <td className="px-5 py-3">
-                    <span className={`font-semibold ${p.stock === 0 ? 'text-rose-500' : p.stock <= 10 ? 'text-amber-500' : ''}`}>{p.stock}</span>
+                    <span className={`font-semibold ${p.stock === 0 ? 'text-rose-500' : p.stock <= 1000 ? 'text-amber-500' : ''}`}>{p.stock}</span>
                   </td>
                   <td className="px-5 py-3">{p.rating.toFixed(1)} ({p.numReviews})</td>
                   <td className="px-5 py-3">

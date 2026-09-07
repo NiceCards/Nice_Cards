@@ -5,6 +5,8 @@ import User from '../models/User.js';
 import Category from '../models/Category.js';
 import { paginate, toJSON } from '../utils/helpers.js';
 
+const LOW_STOCK_THRESHOLD = 1000;
+
 /**
  * GET /admin/dashboard - Aggregate statistics for the admin dashboard.
  */
@@ -20,6 +22,7 @@ export const getDashboardStats = async (_req, res, next) => {
       pendingAgg,
       deliveredAgg,
       lowStock,
+      lowStockCount,
       latestCustomers,
       recentPendingOrders,
     ] = await Promise.all([
@@ -36,10 +39,11 @@ export const getDashboardStats = async (_req, res, next) => {
       DeliveredOrder.aggregate([
         { $group: { _id: null, total: { $sum: '$total' } } },
       ]),
-      Product.find({ stock: { $lte: 10 }, isActive: true })
+      Product.find({ stock: { $lte: LOW_STOCK_THRESHOLD }, isActive: true })
         .sort({ stock: 1 })
-        .limit(8)
+        .limit(200)
         .select('name stock price images'),
+      Product.countDocuments({ stock: { $lte: LOW_STOCK_THRESHOLD }, isActive: true }),
       User.find().sort({ createdAt: -1 }).limit(5).select('name email createdAt isActive'),
       Order.find({ status: 'pending' }).sort({ createdAt: -1 }).limit(5),
     ]);
@@ -59,7 +63,7 @@ export const getDashboardStats = async (_req, res, next) => {
         pendingRevenue: Number(pendingRevenue.toFixed(2)),
         deliveredRevenue: Number(deliveredRevenue.toFixed(2)),
         totalRevenue: Number((pendingRevenue + deliveredRevenue).toFixed(2)),
-        lowStockCount: lowStock.length,
+        lowStockCount,
         lowStock: toJSON(lowStock),
       },
       latestCustomers: toJSON(latestCustomers),

@@ -225,13 +225,13 @@ const AdminProductForm = () => {
 
           <div>
             <label className="label">Price (₹ INR)</label>
-            <input type="number" min="0" step="1" value={form.price} onChange={set('price')} placeholder="2075" className={`input ${errors.price ? 'border-rose-400' : ''}`} />
+            <input type="number" min="0" step="0.01" value={form.price} onChange={set('price')} placeholder="2075.50" className={`input ${errors.price ? 'border-rose-400' : ''}`} />
             {errors.price && <p className="mt-1 text-xs font-medium text-rose-500">{errors.price}</p>}
           </div>
 
           <div>
             <label className="label">Original Price (₹ INR) <span className="font-normal text-slate-400">(optional)</span></label>
-            <input type="number" min="0" step="1" value={form.originalPrice} onChange={set('originalPrice')} placeholder="0" className="input" />
+            <input type="number" min="0" step="0.01" value={form.originalPrice} onChange={set('originalPrice')} placeholder="0" className="input" />
           </div>
 
           <div>

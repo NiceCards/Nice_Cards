@@ -65,28 +65,28 @@ const ProductCard = ({ product }) => {
         </div>
       </Link>
 
-      <div className="p-4">
+      <div className="p-3 sm:p-4">
         <div className="flex items-start justify-between gap-2">
           <div className="min-w-0">
             <Link to={`/product/${product._id}`} className="block truncate text-sm font-bold hover:text-brand-600 dark:hover:text-brand-300">
               {product.name}
             </Link>
-            <p className="mt-0.5 text-xs font-medium text-slate-400">{product.brand}</p>
+            <p className="mt-0.5 hidden text-xs font-medium text-slate-400 sm:block">{product.brand}</p>
           </div>
           <div className="shrink-0 text-right">
-            <p className="text-base font-extrabold text-brand-600 dark:text-brand-300">{formatINR(product.price)}</p>
+            <p className="text-sm font-extrabold text-brand-600 dark:text-brand-300 sm:text-base">{formatINR(product.price)}</p>
             {product.originalPrice > product.price && (
               <p className="text-xs text-slate-400 line-through">{formatINR(product.originalPrice)}</p>
             )}
           </div>
         </div>
 
-        <div className="mt-2 flex items-center justify-between">
+        <div className="mt-2 flex flex-col gap-1.5 sm:flex-row sm:items-center sm:justify-between">
           <div className="flex items-center gap-1.5">
             <Rating value={product.rating} />
-            <span className="text-xs font-medium text-slate-400">({product.numReviews})</span>
+            <span className="hidden text-xs font-medium text-slate-400 sm:inline">({product.numReviews})</span>
           </div>
-          <span className={`badge ${outOfStock ? 'bg-rose-100 text-rose-600 dark:bg-rose-500/10 dark:text-rose-400' : 'bg-emerald-100 text-emerald-600 dark:bg-emerald-500/10 dark:text-emerald-400'}`}>
+          <span className={`badge w-fit ${outOfStock ? 'bg-rose-100 text-rose-600 dark:bg-rose-500/10 dark:text-rose-400' : 'bg-emerald-100 text-emerald-600 dark:bg-emerald-500/10 dark:text-emerald-400'}`}>
             {outOfStock ? 'Out of Stock' : `${product.stock} in stock`}
           </span>
         </div>
@@ -94,7 +94,7 @@ const ProductCard = ({ product }) => {
         <button
           disabled={outOfStock}
           onClick={() => addItem(product)}
-          className="btn-primary mt-3 w-full py-2.5 disabled:from-slate-300 disabled:to-slate-300 disabled:text-slate-500 disabled:shadow-none disabled:hover:brightness-100 disabled:active:scale-100"
+          className="btn-primary mt-3 w-full py-2 sm:py-2.5 disabled:from-slate-300 disabled:to-slate-300 disabled:text-slate-500 disabled:shadow-none disabled:hover:brightness-100 disabled:active:scale-100"
         >
           {outOfStock ? (
             <><IconCheck size={16} /> Out of Stock</>
