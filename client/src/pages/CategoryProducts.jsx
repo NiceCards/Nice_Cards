@@ -78,7 +78,7 @@ const CategoryProducts = () => {
         />
       ) : (
         <>
-          <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
+          <div className="grid grid-cols-2 gap-4 sm:gap-6 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
             {products.map((p) => <ProductCard key={p._id} product={p} />)}
           </div>
           <Pagination page={page} pages={pages} onChange={(p) => setSearchParams({ page: String(p) })} />

@@ -37,8 +37,8 @@ export const placeOrder = async (req, res, next) => {
       }
 
       const quantity = parseInt(item.quantity, 10) || 1;
-      if (quantity < 1 || quantity > 50) {
-        return next(new AppError('Each item quantity must be between 1 and 50', 400));
+      if (quantity < 1) {
+        return next(new AppError('Each item quantity must be at least 1', 400));
       }
       const product = await Product.findById(productId).session(session);
 
